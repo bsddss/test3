@@ -10,6 +10,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -37,9 +38,20 @@ public class mainHandler{
         scoreService = (ScoreServiceImpl) ac.getBean("scoreService");
         classScoreService = (ClassScoreServiceImpl) ac.getBean("classScoreService");
     }
+    //登录
+        @RequestMapping("/signIn")
+        public String doFirst(String name,String password) {
+        if ("ding".equals(name) && "123".equals(password)) {
+           return "redirect:/index.jsp";
+       }
+        else
+            return "/WEB-INF/error.jsp";
+    }
+
 
     @RequestMapping("/AllPerformance")
     public String AllPerformance(HttpServletRequest request){
+        System.out.println("0000000000000000000");
         String url = "/display/AllPerformance.jsp";
         List<Classes> classes = classScoreService.findAllClass();
         List<CandCS> candCS = new ArrayList<CandCS>();
@@ -59,6 +71,7 @@ public class mainHandler{
             candCS1.setClassScore(score);
             candCS.add(candCS1);
         }
+        System.out.println("1111111111");
         request.getSession().setAttribute("candCS",candCS);
         return url;
     }
@@ -260,7 +273,5 @@ public class mainHandler{
         request.getSession().setAttribute("courses",courses);
         return url;
     }
-
-
 
 }
